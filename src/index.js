@@ -55,7 +55,7 @@ app.post("/users", (request, response) => {
     todos: [],
   });
 
-  return response.status(201).send("User saved");
+  return response.status(201).send();
 });
 
 app.get("/todos", checksExistsUserAccount, (request, response) => {
@@ -79,7 +79,7 @@ app.post("/todos", checksExistsUserAccount, (request, response) => {
 
   user.todos.push(todosOperation);
 
-  return response.status(201).send("To-do successfully saved");
+  return response.status(201).send();
 });
 
 app.put(
@@ -114,8 +114,19 @@ app.patch(
   }
 );
 
-app.delete("/todos/:id", checksExistsUserAccount, (request, response) => {
-  // Complete aqui
-});
+app.delete(
+  "/todos/:id",
+  checksExistsUserAccount,
+  checksExistsIdAccount,
+  (request, response) => {
+    const { user } = request;
+    const { todo } = request;
+    const item = user.todos;
+
+    item.splice(item.indexOf(todo), 1);
+
+    return response.status(201).json(user.todos);
+  }
+);
 
 module.exports = app;
