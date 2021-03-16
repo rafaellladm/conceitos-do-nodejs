@@ -34,13 +34,13 @@ app.post("/users", (request, response) => {
   }
 
   users.push({
-    id: uuidv4,
+    id: uuidv4(),
     name,
     username,
     todos: [],
   });
 
-  return response.status(201).send("User save!");
+  return response.status(201).send("User saved");
 });
 
 app.get("/todos", checksExistsUserAccount, (request, response) => {
@@ -50,7 +50,21 @@ app.get("/todos", checksExistsUserAccount, (request, response) => {
 });
 
 app.post("/todos", checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { title, deadline } = request.body;
+
+  const { user } = request;
+
+  const todosOperation = {
+    id: uuidv4(),
+    title,
+    done: false,
+    deadline: new Date(deadline),
+    created_at: new Date(),
+  };
+
+  user.todos.push(todosOperation);
+
+  return response.status(201).send("To-do successfully saved");
 });
 
 app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
