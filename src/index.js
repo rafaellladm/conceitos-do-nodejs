@@ -97,9 +97,22 @@ app.put(
   }
 );
 
-app.patch("/todos/:id/done", checksExistsUserAccount, (request, response) => {
-  // Complete aqui
-});
+app.patch(
+  "/todos/:id/done",
+  checksExistsUserAccount,
+  checksExistsIdAccount,
+  (request, response) => {
+    // Complete aqui
+    const { done } = request.query;
+    const { todo } = request;
+
+    if (done === "true") {
+      todo.done = true;
+    }
+
+    return response.status(201).send();
+  }
+);
 
 app.delete("/todos/:id", checksExistsUserAccount, (request, response) => {
   // Complete aqui
